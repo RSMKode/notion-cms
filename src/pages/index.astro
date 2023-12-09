@@ -51,7 +51,7 @@ const articles = JSON.stringify(results);
       width: 100%;
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(20em, 1fr));
-      gap: var(--size-fluid-3);
+      gap: clamp(1.5rem, 3vw, 2rem);
     }
   </style>
 </Layout>
