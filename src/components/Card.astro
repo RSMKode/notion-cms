@@ -1,0 +1,57 @@
+---
+interface Props {
+  img: string;
+  title: string;
+  content: string;
+  btn_text: string;
+  link: string;
+}
+
+const { img, title, content, btn_text, link } = Astro.props;
+---
+
+<article class="card">
+  <img src={img} alt="Doodle" />
+  <h2>
+    {title}
+  </h2>
+  <p>
+    {content}
+  </p>
+  <a href={link}>{btn_text}</a>
+</article>
+<style>
+  .card {
+    display: flex;
+    flex-direction: column;
+    place-content: start;
+    gap: 1em;
+    background-color: #23262d;
+    border-radius: 1em;
+    background-color: #23262d;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: white;
+    padding: 1.5em 2em;
+  }
+
+  h2 {
+    color: var(--cyan-4);
+  }
+  a {
+    width: fit-content;
+    padding: 0.5em 1em;
+    text-decoration: none;
+    border-radius: 1em;
+    border: 1px solid white;
+    background-image: var(--accent-gradient);
+    color: white;
+    text-shadow: 1px 1px 2px black;
+    box-shadow: 5px 5px 20px black;
+    transition: all 300ms ease;
+  }
+
+  a:is(:hover, :focus) {
+    box-shadow: none;
+    scale: 0.95;
+  }
+</style>

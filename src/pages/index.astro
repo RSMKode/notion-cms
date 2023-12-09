@@ -1,0 +1,69 @@
+---
+import dotenv from "dotenv";
+import { Client } from "@notionhq/client";
+import { getDatabaseData } from "../services/notionApi";
+dotenv.config();
+
+const { NOTION_API_KEY, NOTION_DB_ID } = process.env;
+
+const NOTION_CLIENT = new Client({ auth: NOTION_API_KEY });
+
+import Layout from "../layouts/Layout.astro";
+import Card from "../components/Card.astro";
+
+const { results } = await getDatabaseData(NOTION_CLIENT, NOTION_DB_ID);
+console.log(results);
+const articles = JSON.stringify(results);
+---
+
+<Layout title="Notion CMS">
+  <h1>Welcome to <span class="text-gradient">Notion CMS</span></h1>
+  <main class="card-container">
+    <!-- <Card
+      title="Documentation"
+      content="Lorem ipsum dolor sit amet consectetur adipisicing elit. Ullam quia, odio quidem necessitatibus aliquam eveniet debitis voluptatum molestiae, praesentium incidunt ratione, quasi quaerat aperiam assumenda magni neque dolorem totam asperiores."
+      img="https://doodleipsum.com/400x197?i=60c91150119e65a1f47b00bd5a4d9c40"
+      link="#"
+    />
+    <Card
+      title="Documentation"
+      content="Lorem ipsum dolor sit amet consectetur adipisicing elit. Ullam quia, odio quidem necessitatibus aliquam eveniet debitis voluptatum molestiae, praesentium incidunt ratione, quasi quaerat aperiam assumenda magni neque dolorem totam asperiores."
+      img="https://doodleipsum.com/400x197?i=60c91150119e65a1f47b00bd5a4d9c40"
+      link="#"
+    /> -->
+    {
+      results.map((card) => {
+        return (
+          //{card.properties.Nombre.title[0].text.content}
+          <Card
+            title={card.properties.Name.title[0].text.content}
+            content={card.properties.Content.rich_text[0].text.content}
+            img={card.properties.Image.files[0].external.url}
+            btn_text={card.properties.Btn_text.rich_text[0].text.content}
+            link={card.properties.Link.url}
+          />
+        );
+      })
+    }
+  </main>
+  <style>
+    h1 {
+      font-size: 4rem;
+      font-weight: 700;
+      line-height: 1;
+      text-align: center;
+      color: white;
+    }
+    .text-gradient {
+      background-image: var(--accent-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    main.card-container {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(20em, 1fr));
+      gap: var(--size-fluid-3);
+    }
+  </style>
+</Layout>

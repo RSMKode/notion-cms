@@ -1,0 +1,19 @@
+---
+import dotenv from "dotenv";
+import { Client } from "@notionhq/client";
+import { getDatabaseData } from "../services/notionApi";
+dotenv.config();
+
+const { NOTION_API_KEY, NOTION_DB_ID } = process.env;
+
+const NOTION_CLIENT = new Client({ auth: NOTION_API_KEY });
+
+import Layout from "../layouts/Layout.astro";
+import Card from "../components/Card.astro";
+
+const { results } = await getDatabaseData(NOTION_CLIENT, NOTION_DB_ID);
+console.log(results);
+const articles = JSON.stringify(results);
+---
+
+{articles}
