@@ -1,8 +1,8 @@
 ---
 import dotenv from "dotenv";
+dotenv.config();
 import { Client } from "@notionhq/client";
 import { getDatabaseData } from "../services/notionApi";
-dotenv.config();
 
 const { NOTION_API_KEY, NOTION_DB_ID } = process.env;
 
