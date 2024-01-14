@@ -1,0 +1,50 @@
+---
+// @ts-nocheck
+import * as cheerio from "cheerio";
+import { scrape } from "../services/scraper";
+
+import Layout from "../layouts/Layout.astro";
+import Card from "../components/Card.astro";
+
+// const html = await scrape(
+//   "https://marvel.fandom.com/wiki/Amazing_Spider-Man_Vol_1_1"
+// );
+const html = await fetch(
+  "https://marvel.fandom.com/wiki/Amazing_Spider-Man_Vol_1_1"
+).then((response) => response.text());
+
+const $ = cheerio.load(html);
+
+// const objeto = $.extract({
+//   comic_title: "h2.pi-title",
+//   creators: {
+//     writers: "[data-source='Writers'] div a",
+//   },
+// });
+
+const comicTitle = $("h2.pi-title").text();
+
+const writersData = $("[data-source^='Writers'] div a").toArray();
+const writersArray = Array.from(
+  new Set(writersData.map((element) => element.children[0]["data"]))
+);
+
+const pencilersData = $("[data-source^='Pencilers'] div a").toArray();
+const pencilersArray = Array.from(
+  new Set(pencilersData.map((element) => element.children[0]["data"]))
+);
+
+console.log(comicTitle);
+console.log(writersArray);
+// console.log(writersArray);
+---
+
+<Layout title="Notion CMS">
+  <h2>{comicTitle}</h2>
+  <ul>
+    {writersArray.map((element) => <li>{element}</li>)}
+  </ul>
+  <ul>
+    {pencilersArray.map((element) => <li>{element}</li>)}
+  </ul>
+</Layout>
